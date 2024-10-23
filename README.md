@@ -13,11 +13,10 @@ This project demonstrates the deployment of a ChatGPT clone app using a DevSecOp
 2. [Setup Instructions](#setup-instructions)
 3. [Steps for Deployment](#steps-for-deployment)
 4. [CI/CD Pipeline](#CI/CD-pipeline)
-5. [Kubernetes Cluster Creation using Terraform](#kubernetes-cluster-creation-using-terraform)
-6. [Application Deployment on Kubernetes](#application-deployment-on-kubernetes)
-7. [Monitoring via Prometheus and Grafana](#monitoring-via-prometheus-and-grafana)
-8. [Cleanup: Destroying Infrastructure](#cleanup-destroying-infrastructure)
-9. [Conclusion](#conclusion)
+5. [Application Deployment on Kubernetes](#application-deployment-on-kubernetes)
+6. [Monitoring via Prometheus and Grafana](#monitoring-via-prometheus-and-grafana)
+7. [Cleanup: Destroying Infrastructure](#cleanup-destroying-infrastructure)
+8. [Conclusion](#conclusion)
 
 ---
 
