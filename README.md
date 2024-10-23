@@ -117,9 +117,10 @@ pipeline {
 ### Step 4: Deploy the Application
 1. **Back to your EC2 instance, run the following command:**
 
-``bash
+```bash
 aws eks update-kubeconfig --name <clustername> --region <region>
-``
+```
+- The command `aws eks update-kubeconfig --name EKS_CLOUD --region us-east-1` is like telling our computer, "Hey, I'm using Amazon EKS (Elastic Kubernetes Service) in the 'us-east-1' region, and I want to connect to it." You could use your desired location.
 
 Example:
 
@@ -141,6 +142,8 @@ cd Chat-gpt-deployment/k8s
 
 4. **Deploy the application with the following commands:**
 
+-You will find the deployment file for Kubernetes chatbot. Run the following command to deploy the application
+
 ```bash
 kubectl apply -f chatbot-ui.yaml
 kubectl get all
@@ -148,9 +151,33 @@ kubectl get all
 
 5. **Copy the Load Balancer external IP and paste it in your browser.**
 
+6. **Now, again, the application is deployed on Kubernetes.**
+
+**Load Balancer Ingress**
+
+The Load Balancer Ingress is a mechanism that helps distribute incoming internet traffic among multiple servers or services, ensuring efficient and reliable delivery of requests.
+
+It’s like having a receptionist at a busy office building entrance who guides visitors to different floors or departments, preventing overcrowding at any one location. In the digital world, a Load Balancer Ingress helps maintain a smooth user experience, improves application performance, and ensures that no single server becomes overwhelmed with too much traffic.
+
+
+**Service.yaml**
+
+The `service.yaml` file is like a set of rules that helps computers find and talk to each other within a software application. It's like a directory that says, "Hey, this is how you can reach different parts of our application." It specifies how different parts of your application communicate and how other services or users can connect to them.
+
 ---
 
 ## Monitoring via Prometheus and Grafana
+
+<dl>
+  <dt>Prometheus</dt>
+  <dd>Prometheus is like a detective that constantly watches your software and gathers data about how it’s performing. It’s good at collecting metrics, like how fast your software is running or how many users      are visiting your website.</dd>
+
+<dl>
+  <dt>Grafana</dt>
+  <dd>Grafana, on the other hand, is like a dashboard designer. It takes all the data collected by Prometheus and turns it into easy-to-read charts and graphs. This helps you see how well your software is doing at a glance and spot any problems quickly.</dd>
+
+  <dd>In other words, Prometheus collects the information, and Grafana makes it look pretty and understandable so you can make decisions about your software. They’re often used together to monitor and manage applications and infrastructure.</dd>
+
 ### Step 5: Set Up Monitoring
 1. **Setup a Monitoring Server:**
 - Launch a new EC2 instance with Ubuntu and t2.medium specs.
