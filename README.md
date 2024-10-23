@@ -10,7 +10,7 @@ This project demonstrates the deployment of a ChatGPT clone app using a DevSecOp
 1. [Prerequisites](#prerequisites)
 2. [Setup Instructions](#setup-instructions)
 3. [Steps for Deployment](#steps-for-deployment)
-4. [CI/CD Pipeline](#ci/cd_pipeline)
+4. [CI/CD Pipeline](#cicd_pipeline)
 5. [Kubernetes Cluster Creation using Terraform](#kubernetes-cluster-creation-using-terraform)
 6. [Application Deployment on Kubernetes](#application-deployment-on-kubernetes)
 7. [Monitoring via Prometheus and Grafana](#monitoring-via-prometheus-and-grafana)
@@ -80,13 +80,13 @@ terraform apply --auto-approve
 
 1. **SonarQube:**
 
-  - Access SonarQube via http://<public_ip>:9000.
+  - Access SonarQube via `http://<public_ip>:9000`.
   - Default username/password: admin/admin.
   - Update your password.
 
 2. **Jenkins:**
 
-  - Access Jenkins via http://<public_ip>:8080.
+  - Access Jenkins via `http://<public_ip>:8080`.
   - Retrieve the initial admin password:
 
 ```bash
@@ -98,7 +98,7 @@ cat /var/lib/jenkins/secrets/initialAdminPassword
 
 ---
 
-## CI/CD Pipeline
+## CICD Pipeline
 ### Step 4: Set Up Jenkins Pipeline
 
 1. **Install Required Plugins:**
@@ -107,6 +107,9 @@ cat /var/lib/jenkins/secrets/initialAdminPassword
   - SonarQube Scanner
   - NodeJS Plugin
   - OWASP Plugin
+
+  > The OWASP Plugin in Jenkins is like a `security assistant` that helps you find and fix security issues in your software. It uses the knowledge and guidelines from the Open Web Application Security Project       > (OWASP) to scan your web applications and provide suggestions on how to make them more secure. It’s a tool to ensure that your web applications are protected against common security threats and vulnerabilities
+
   - Prometheus metrics
   - Docker-related plugins
   - Kubernetes plugins
