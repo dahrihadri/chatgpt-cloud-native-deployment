@@ -4,6 +4,8 @@
 
 This project demonstrates the deployment of a ChatGPT clone app using a DevSecOps approach. We will leverage multiple DevOps tools and AWS cloud services for a robust and secure deployment.
 
+![image](https://github.com/user-attachments/assets/3042a1ea-4372-434b-bf5e-8445b9bb741c)
+
 ---
 
 ## Table of Contents
