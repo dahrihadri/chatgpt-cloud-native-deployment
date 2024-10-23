@@ -133,80 +133,85 @@ cat /var/lib/jenkins/secrets/initialAdminPassword
   - Create a new pipeline job in Jenkins and use the following script:
 
 ```groovy
-pipeline {
+pipeline{
     agent any
-    tools {
+    tools{
         jdk 'jdk17'
         nodejs 'node16'
     }
+    environment {
+        SCANNER_HOME=tool 'sonar-scanner'
+    }
     stages {
-        stage('Checkout from Git') {
-            steps {
+        stage('Checkout from Git'){
+            steps{
                 git branch: 'legacy', url: 'https://github.com/Aakibgithuber/Chat-gpt-deployment.git'
             }
         }
-        // Further stages for build, analysis, and deployment...
+        stage('Install Dependencies') {
+            steps {
+                sh "npm install"
+            }
+        }
+        stage("Sonarqube Analysis "){
+            steps{
+                withSonarQubeEnv('sonar-server') {
+                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Chatbot \
+                    -Dsonar.projectKey=Chatbot '''
+                }
+            }
+        }
+        stage("quality gate"){
+           steps {
+                script {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-token'
+                }
+            }
+        }
+        stage('OWASP FS SCAN') {
+            steps {
+                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
+        stage('TRIVY FS SCAN') {
+            steps {
+                sh "trivy fs . > trivyfs.json"
+            }
+        }
+        stage("Docker Build & Push"){
+            steps{
+                script{
+                   withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
+                       sh "docker build -t chatbot ."
+                       sh "docker tag chatbot aakibkhan1212/chatbot:latest "
+                       sh "docker push aakibkhan1212/chatbot:latest "
+                    }
+                }
+            }
+        }
+        stage("TRIVY"){
+            steps{
+                sh "trivy image aakibkhan1212/chatbot:latest > trivy.json"
+            }
+        }
+        stage ("Remove container") {
+            steps{
+                sh "docker stop chatbot | true"
+                sh "docker rm chatbot | true"
+             }
+        }
+        stage('Deploy to container'){
+            steps{
+                sh 'docker run -d --name chatbot -p 3000:3000 aakibkhan1212/chatbot:latest'
+            }
+        }
     }
 }
 ```
 
----
-
-
-## Kubernetes Cluster Creation using Terraform
-### Step 5: Create a New Jenkins Pipeline for EKS
-1. **In Jenkins, create a new pipeline named eks-terraform.**
-2. **Scroll down and select This project is parameterized.**
-3. **Scroll down to the pipeline script and paste the following:**
-
-```groovy
-pipeline {
-    agent any
-    stages {
-        stage('Checkout from Git') {
-            steps {
-                git branch: 'legacy', url: 'https://github.com/dahrihadri/Chat-gpt-deployment.git'
-            }
-        }
-        stage('Terraform Version') {
-            steps {
-                sh 'terraform --version'
-            }
-        }
-        stage('Terraform Init') {
-            steps {
-                dir('Eks-terraform') {
-                    sh 'terraform init'
-                }
-            }
-        }
-        stage('Terraform Validate') {
-            steps {
-                dir('Eks-terraform') {
-                    sh 'terraform validate'
-                }
-            }
-        }
-        stage('Terraform Plan') {
-            steps {
-                dir('Eks-terraform') {
-                    sh 'terraform plan'
-                }
-            }
-        }
-        stage('Terraform Apply/Destroy') {
-            steps {
-                dir('Eks-terraform') {
-                    sh 'terraform ${action} --auto-approve'
-                }
-            }
-        }
-    }
-}
-```
-
-4. **Click on Apply and then Save.**
-5. **Now click on Build with Parameters and then on Apply.**
+6. **Click on Apply and then Save.**
+7. **Now click on Build with Parameters and then on Apply.**
 
 ---
 
