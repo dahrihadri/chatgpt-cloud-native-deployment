@@ -25,7 +25,7 @@ This project demonstrates the deployment of a ChatGPT clone app using a DevSecOp
   ```bash
   mkdir gpt
   cd gpt
-  git clone https://github.com/dahrihadri/chatgpt-cloud-native-deployment
+  git clone https://github.com/dahrihadri/Chat-gpt-deployment
   ```
 ---
 
