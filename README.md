@@ -13,6 +13,7 @@ This project demonstrates the deployment of a ChatGPT clone app using a DevSecOp
 4. [Application Deployment on Kubernetes](#application-deployment-on-kubernetes)
 5. [Monitoring via Prometheus and Grafana](#monitoring-via-prometheus-and-grafana)
 6. [Cleanup: Destroying Infrastructure](#cleanup-destroying-infrastructure)
+7. [Conclusion](#conclusion)
 
 ---
 
@@ -26,6 +27,7 @@ This project demonstrates the deployment of a ChatGPT clone app using a DevSecOp
   cd gpt
   git clone https://github.com/Aakibgithuber/Chat-gpt-deployment.git
   ```
+---
 
 ## Setup Instructions
 ### Step 1: Setup Terraform and Configure AWS
