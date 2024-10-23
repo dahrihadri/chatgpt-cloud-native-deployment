@@ -25,7 +25,7 @@ This project demonstrates the deployment of a ChatGPT clone app using a DevSecOp
   ```bash
   mkdir gpt
   cd gpt
-  git clone https://github.com/dahrihadri/Chat-gpt-deployment
+  git clone https://github.com/dahrihadri/Chat-gpt-deployment.git
   ```
 ---
 
@@ -61,7 +61,7 @@ pipeline {
     stages {
         stage('Checkout from Git') {
             steps {
-                git branch: 'legacy', url: 'https://github.com/Aakibgithuber/Chat-gpt-deployment.git'
+                git branch: 'legacy', url: 'https://github.com/dahrihadri/Chat-gpt-deployment.git'
             }
         }
         stage('Terraform Version') {
@@ -131,7 +131,7 @@ aws eks update-kubeconfig --name EKS_CLOUD --region us-east-1
 2. **Clone the repository on your EC2 instance:**
 
 ```bash
-git clone https://github.com/Aakibgithuber/Chat-gpt-deployment.git
+git clone https://github.com/dahrihadri/Chat-gpt-deployment.git
 ```
 
 3. **Navigate to the Kubernetes folder:**
