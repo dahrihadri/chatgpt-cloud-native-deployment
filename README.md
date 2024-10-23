@@ -155,28 +155,29 @@ kubectl get all
 
 **Load Balancer Ingress**
 
-The Load Balancer Ingress is a mechanism that helps distribute incoming internet traffic among multiple servers or services, ensuring efficient and reliable delivery of requests.
+> The Load Balancer Ingress is a mechanism that helps distribute incoming internet traffic among multiple servers or services, ensuring efficient and reliable delivery of requests.
 
-It’s like having a receptionist at a busy office building entrance who guides visitors to different floors or departments, preventing overcrowding at any one location. In the digital world, a Load Balancer Ingress helps maintain a smooth user experience, improves application performance, and ensures that no single server becomes overwhelmed with too much traffic.
+> It’s like having a receptionist at a busy office building entrance who guides visitors to different floors or departments, preventing overcrowding at any one location. In the digital world, a Load Balancer 
+> Ingress helps maintain a smooth user experience, improves application performance, and ensures that no single server becomes overwhelmed with too much traffic.
 
 
 **Service.yaml**
 
-The `service.yaml` file is like a set of rules that helps computers find and talk to each other within a software application. It's like a directory that says, "Hey, this is how you can reach different parts of our application." It specifies how different parts of your application communicate and how other services or users can connect to them.
+> The `service.yaml` file is like a set of rules that helps computers find and talk to each other within a software application. It's like a directory that says, "Hey, this is how you can reach different parts of > our application." It specifies how different parts of your application communicate and how other services or users can connect to them.
 
 ---
 
 ## Monitoring via Prometheus and Grafana
 
-<dl>
-  <dt>Prometheus</dt>
-  <dd>Prometheus is like a detective that constantly watches your software and gathers data about how it’s performing. It’s good at collecting metrics, like how fast your software is running or how many users      are visiting your website.</dd>
+Prometheus
+> is like a detective that constantly watches your software and gathers data about how it’s performing. It’s good at collecting metrics, like how fast your software is running or how many users are visiting your > website.
 
-<dl>
-  <dt>Grafana</dt>
-  <dd>Grafana, on the other hand, is like a dashboard designer. It takes all the data collected by Prometheus and turns it into easy-to-read charts and graphs. This helps you see how well your software is doing at a glance and spot any problems quickly.</dd>
+Grafana
+> On the other hand, is like a dashboard designer. It takes all the data collected by Prometheus and turns it into easy-to-read charts and graphs. This helps you see how well your software is doing at a glance 
+> and spot any problems quickly.
 
-  <dd>In other words, Prometheus collects the information, and Grafana makes it look pretty and understandable so you can make decisions about your software. They’re often used together to monitor and manage applications and infrastructure.</dd>
+> In other words, `Prometheus` collects the information, and `Grafana` makes it look pretty and understandable so you can make decisions about your software. They’re often used together to monitor and manage 
+> applications and infrastructure.
 
 ### Step 5: Set Up Monitoring
 1. **Setup a Monitoring Server:**
