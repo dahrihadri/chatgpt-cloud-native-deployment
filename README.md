@@ -11,12 +11,11 @@ This project demonstrates the deployment of a ChatGPT clone app using a DevSecOp
 2. [Setup Instructions](#setup-instructions)
 3. [Steps for Deployment](#steps-for-deployment)
 4. [CI/CD Pipeline](#ci/cd_pipeline)
-
 5. [Kubernetes Cluster Creation using Terraform](#kubernetes-cluster-creation-using-terraform)
-4. [Application Deployment on Kubernetes](#application-deployment-on-kubernetes)
-5. [Monitoring via Prometheus and Grafana](#monitoring-via-prometheus-and-grafana)
-6. [Cleanup: Destroying Infrastructure](#cleanup-destroying-infrastructure)
-7. [Conclusion](#conclusion)
+6. [Application Deployment on Kubernetes](#application-deployment-on-kubernetes)
+7. [Monitoring via Prometheus and Grafana](#monitoring-via-prometheus-and-grafana)
+8. [Cleanup: Destroying Infrastructure](#cleanup-destroying-infrastructure)
+9. [Conclusion](#conclusion)
 
 ---
 
@@ -151,9 +150,8 @@ pipeline {
 ---
 
 
-
 ## Kubernetes Cluster Creation using Terraform
-### Step 2: Create a New Jenkins Pipeline for EKS
+### Step 5: Create a New Jenkins Pipeline for EKS
 1. **In Jenkins, create a new pipeline named eks-terraform.**
 2. **Scroll down and select This project is parameterized.**
 3. **Scroll down to the pipeline script and paste the following:**
@@ -209,7 +207,7 @@ pipeline {
 
 ---
 
-### Step 3: Cluster Creation
+### Step 5: Cluster Creation
 - It takes about 10 to 15 minutes to create the cluster.
 - Once completed, go to your AWS Console and search for EKS.
 - Check the Node Groups and go to your EC2 instances—your instance should be ready.
@@ -217,7 +215,7 @@ pipeline {
 ---
 
 ## Application Deployment on Kubernetes
-### Step 4: Deploy the Application
+### Step 6: Deploy the Application
 1. **Back to your EC2 instance, run the following command:**
 
 ```bash
@@ -284,7 +282,7 @@ cd Chat-gpt-deployment/k8s
 > In other words, `Prometheus` collects the information, and `Grafana` makes it look pretty and understandable so you can make decisions about your software. They’re often used together to monitor and manage 
 > applications and infrastructure.
 
-### Step 5: Set Up Monitoring
+### Step 7: Set Up Monitoring
 1. **Setup a Monitoring Server:**
 - Go to the EC2 console and launch an instance having a base image of Ubuntu with t2.medium specs because Minimum Requirements to Install Prometheus:
 
@@ -463,7 +461,7 @@ sudo systemctl start grafana-server
 ---
 
 ## Cleanup: Destroying Infrastructure
-### Step 6: Clean Up Resources
+### Step 8: Clean Up Resources
 
 1. **Delete Kubernetes Deployment:**
 
