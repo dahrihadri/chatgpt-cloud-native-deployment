@@ -145,7 +145,7 @@ pipeline{
     stages {
         stage('Checkout from Git'){
             steps{
-                git branch: 'legacy', url: 'https://github.com/Aakibgithuber/Chat-gpt-deployment.git'
+                git branch: 'legacy', url: 'https://github.com/dahrihadri/Chat-gpt-deployment.git'
             }
         }
         stage('Install Dependencies') {
@@ -184,15 +184,15 @@ pipeline{
                 script{
                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
                        sh "docker build -t chatbot ."
-                       sh "docker tag chatbot aakibkhan1212/chatbot:latest "
-                       sh "docker push aakibkhan1212/chatbot:latest "
+                       sh "docker tag chatbot dahrihadri/chatbot:latest "
+                       sh "docker push dahrihadri/chatbot:latest "
                     }
                 }
             }
         }
         stage("TRIVY"){
             steps{
-                sh "trivy image aakibkhan1212/chatbot:latest > trivy.json"
+                sh "trivy image dahrihadri/chatbot:latest > trivy.json"
             }
         }
         stage ("Remove container") {
@@ -203,7 +203,7 @@ pipeline{
         }
         stage('Deploy to container'){
             steps{
-                sh 'docker run -d --name chatbot -p 3000:3000 aakibkhan1212/chatbot:latest'
+                sh 'docker run -d --name chatbot -p 3000:3000 dahrihadri/chatbot:latest'
             }
         }
     }
