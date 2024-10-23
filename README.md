@@ -120,7 +120,7 @@ pipeline {
 ```bash
 aws eks update-kubeconfig --name <clustername> --region <region>
 ```
-- The command `aws eks update-kubeconfig --name EKS_CLOUD --region us-east-1` is like telling our computer, "Hey, I'm using Amazon EKS (Elastic Kubernetes Service) in the 'us-east-1' region, and I want to connect to it." You could use your desired location.
+  - The command `aws eks update-kubeconfig --name EKS_CLOUD --region us-east-1` is like telling our computer, "Hey, I'm using Amazon EKS (Elastic Kubernetes Service) in the 'us-east-1' region, and I want to   connect to it." You could use your desired location.
 
 Example:
 
@@ -142,12 +142,12 @@ cd Chat-gpt-deployment/k8s
 
 4. **Deploy the application with the following commands:**
 
--You will find the deployment file for Kubernetes chatbot. Run the following command to deploy the application
+  - You will find the deployment file for Kubernetes chatbot. Run the following command to deploy the application
 
-```bash
-kubectl apply -f chatbot-ui.yaml
-kubectl get all
-```
+  ```bash
+  kubectl apply -f chatbot-ui.yaml
+  kubectl get all
+  ```
 
 5. **Copy the Load Balancer external IP and paste it in your browser.**
 
@@ -169,10 +169,12 @@ kubectl get all
 
 ## Monitoring via Prometheus and Grafana
 
-Prometheus
+**Prometheus**
+
 > is like a detective that constantly watches your software and gathers data about how it’s performing. It’s good at collecting metrics, like how fast your software is running or how many users are visiting your > website.
 
-Grafana
+**Grafana**
+
 > On the other hand, is like a dashboard designer. It takes all the data collected by Prometheus and turns it into easy-to-read charts and graphs. This helps you see how well your software is doing at a glance 
 > and spot any problems quickly.
 
@@ -181,20 +183,30 @@ Grafana
 
 ### Step 5: Set Up Monitoring
 1. **Setup a Monitoring Server:**
-- Launch a new EC2 instance with Ubuntu and t2.medium specs.
+- Go to the EC2 console and launch an instance having a base image of Ubuntu with t2.medium specs because Minimum Requirements to Install Prometheus:
+
+  - 2 CPU cores.
+  - 4 GB of memory.
+  - 20 GB of free disk space.
   
 2. **Install Prometheus:**
+  - First, create a dedicated Linux user for Prometheus and download Prometheus:
 
-```bash
-sudo useradd --system --no-create-home --shell /bin/false prometheus
-wget https://github.com/prometheus/prometheus/releases/download/v2.47.1/prometheus-2.47.1.linux-amd64.tar.gz
-tar -xvf prometheus-2.47.1.linux-amd64.tar.gz
-cd prometheus-2.47.1.linux-amd64/
-sudo mkdir -p /data /etc/prometheus
-sudo mv prometheus promtool /usr/local/bin/
-sudo mv consoles/ console_libraries/ /etc/prometheus/
-sudo mv prometheus.yml /etc/prometheus/prometheus.yml
-```
+  ```bash
+  sudo useradd --system --no-create-home --shell /bin/false prometheus
+  wget https://github.com/prometheus/prometheus/releases/download/v2.47.1/prometheus-2.47.1.linux-amd64.tar.gz
+  ```
+
+  - Extract Prometheus files, move them, and create directories:
+
+  ```bash
+  tar -xvf prometheus-2.47.1.linux-amd64.tar.gz
+  cd prometheus-2.47.1.linux-amd64/
+  sudo mkdir -p /data /etc/prometheus
+  sudo mv prometheus promtool /usr/local/bin/
+  sudo mv consoles/ console_libraries/ /etc/prometheus/
+  sudo mv prometheus.yml /etc/prometheus/prometheus.yml
+  ```
 
 3. **Set Ownership for Directories:**
 
@@ -208,25 +220,25 @@ sudo chown -R prometheus:prometheus /etc/prometheus/ /data/
 sudo nano /etc/systemd/system/prometheus.service
 ```
 
-Add the following content:
+- Add the following content:
 
-```ini
-[Unit]
-Description=Prometheus
-Wants=network-online.target
-After=network-online.target
-[Service]
-User=prometheus
-Group=prometheus
-Type=simple
-Restart=on-failure
-ExecStart=/usr/local/bin/prometheus \
-    --config.file=/etc/prometheus/prometheus.yml \
-    --storage.tsdb.path=/data \
-    --web.listen-address=0.0.0.0:9090
-[Install]
-WantedBy=multi-user.target
-```
+  ```ini
+  [Unit]
+  Description=Prometheus
+  Wants=network-online.target
+  After=network-online.target
+  [Service]
+  User=prometheus
+  Group=prometheus
+  Type=simple
+  Restart=on-failure
+  ExecStart=/usr/local/bin/prometheus \
+      --config.file=/etc/prometheus/prometheus.yml \
+      --storage.tsdb.path=/data \
+      --web.listen-address=0.0.0.0:9090
+  [Install]
+  WantedBy=multi-user.target
+  ```
 
 5. **Enable and Start Prometheus:**
 
@@ -237,16 +249,75 @@ sudo systemctl status prometheus
 ```
 
 6. **Open Port 9090 in the Security Group:**
+Now go to the security group of your EC2 to enable port 9090 in which Prometheus will run.
 
-- Access Prometheus at `http://<public_ip>:9090`.
+  - Access Prometheus at `http://<public_ip>:9090`.
 
 7. **Install Node Exporter:**
 
-- Follow similar steps as above to install Node Exporter.
+**Node Exporter**
+
+> Node Exporter is like a “reporter” tool for Prometheus, which helps collect and provide information about a computer (node) so Prometheus can monitor it. It gathers data about things like CPU usage, memory, 
+> disk space, and network activity on that computer.
+
+**Node Port Exporter**
+
+> A Node Port Exporter is a specific kind of Node Exporter that is used to collect information about network ports on a computer. It tells Prometheus which network ports are open and what kind of data is going in > and out of those ports. This information is useful for monitoring network-related activities and can help you ensure that your applications and services are running smoothly and securely.
+
+- Run the following commands for installation:
+
+a. Create a system user for Node Exporter and download Node Exporter:
+
+```bash
+sudo useradd --system --no-create-home --shell /bin/false node_exporter
+wget https://github.com/prometheus/node_exporter/releases/download/v1.6.1/node_exporter-1.6.1.linux-amd64.tar.gz
+```
+
+b. Extract Node Exporter files, move the binary, and clean up:
+
+```bash
+tar -xvf node_exporter-1.6.1.linux-amd64.tar.gz
+sudo mv node_exporter-1.6.1.linux-amd64/node_exporter /usr/local/bin/
+rm -rf node_exporter*
+```
+
+c. Create a systemd unit configuration file for Node Exporter:
+
+```bash
+sudo nano /etc/systemd/system/node_exporter.service
+```
+
+d. Add the following code to the node_exporter.service file:
+
+```ini
+[Unit]
+Description=Node Exporter
+After=network.target
+
+[Service]
+User=node_exporter
+Group=node_exporter
+Type=simple
+ExecStart=/usr/local/bin/node_exporter
+
+[Install]
+WantedBy=default.target
+```
+
+e. Enable and start Node Exporter:
+
+```bash
+sudo useradd -m -s /bin/bash node_exporter
+sudo chown node_exporter:node_exporter /usr/local/bin/node_exporter
+sudo systemctl daemon-reload
+sudo systemctl start node_exporter
+sudo systemctl enable node_exporter
+sudo system
+```
 
 8. **Configure Prometheus:**
 
-- Edit `/etc/prometheus/prometheus.yml` to include Node Exporter and Jenkins as targets.
+  - Edit `/etc/prometheus/prometheus.yml` to include Node Exporter and Jenkins as targets.
 
 ```yaml
 scrape_configs:
@@ -279,8 +350,8 @@ sudo systemctl start grafana-server
 
 11. **Open Port 3000 in the Security Group:**
 
-- Access Grafana at `http://<public_ip>:3000`.
-- Login with `admin/admin`.
+  - Access Grafana at `http://<public_ip>:3000`.
+  - Login with `admin/admin`.
 
 12.** Add Prometheus as a Data Source in Grafana.**
 
@@ -299,16 +370,16 @@ kubectl delete deployment chatbot
 
 2. **Destroy the EKS Cluster:**
 
-- Go to your Jenkins, locate the eks-terraform pipeline, and select the destroy option.
-- Click on Build.
+  - Go to your Jenkins, locate the eks-terraform pipeline, and select the destroy option.
+  - Click on Build.
 
 3. **Delete the EC2 Instances:**
 
-- After the EKS cluster deletion, delete the base instance (GPT instance) and monitoring instance.
+  - After the EKS cluster deletion, delete the base instance (GPT instance) and monitoring instance.
 
-```bash
-terraform destroy --auto-approve
-```
+  ```bash
+  terraform destroy --auto-approve
+  ```
 
 4, **Remove IAM Roles and Users from the IAM section.**
 
