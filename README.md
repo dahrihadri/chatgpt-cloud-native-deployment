@@ -9,7 +9,10 @@ This project demonstrates the deployment of a ChatGPT clone app using a DevSecOp
 ## Table of Contents
 1. [Prerequisites](#prerequisites)
 2. [Setup Instructions](#setup-instructions)
-3. [Kubernetes Cluster Creation using Terraform](#kubernetes-cluster-creation-using-terraform)
+3. [Steps for Deployment](#steps-for-deployment)
+4. [CI/CD Pipeline](#ci/cd_pipeline)
+
+5. [Kubernetes Cluster Creation using Terraform](#kubernetes-cluster-creation-using-terraform)
 4. [Application Deployment on Kubernetes](#application-deployment-on-kubernetes)
 5. [Monitoring via Prometheus and Grafana](#monitoring-via-prometheus-and-grafana)
 6. [Cleanup: Destroying Infrastructure](#cleanup-destroying-infrastructure)
@@ -39,15 +42,115 @@ snap install terraform --classic
 which terraform
 ```
 
-2. **Configure AWS CLI:**
+2. **Configure AWS:**
+
+- Create an IAM user:
+  - Go to the IAM section of your AWS account.
+  - Click on Users → Add user.
+  - Provide a username and select AWS Management Console access.
+  - Set a password and click Next.
+  - Attach policies (e.g., AdministratorAccess).
+  - Click Next and then Create User.
+  - Download the CSV with your access credentials.
+
+3. **Configure AWS CLI:**
 
 ```bash
 aws configure
 ```
 
-- Enter your access key and secret key.
+- Enter your access key and secret key from the CSV file.
 
 ---
+
+## Steps for Deployment
+### Step 2: Build Infrastructure with Terraform
+
+- Execute the following commands:
+
+```bash
+terraform init
+terraform validate
+terraform plan
+terraform apply --auto-approve
+```
+
+- This will create an EC2 instance configured to run Jenkins, Docker, and SonarQube.
+
+### Step 3: Setup SonarQube and Jenkins
+
+1. **SonarQube:**
+
+  - Access SonarQube via http://<public_ip>:9000.
+  - Default username/password: admin/admin.
+  - Update your password.
+
+2. **Jenkins:**
+
+  - Access Jenkins via http://<public_ip>:8080.
+  - Retrieve the initial admin password:
+
+```bash
+sudo su
+cat /var/lib/jenkins/secrets/initialAdminPassword
+```
+
+  - Install suggested plugins and set up your Jenkins user.
+
+---
+
+## CI/CD Pipeline
+### Step 4: Set Up Jenkins Pipeline
+
+1. **Install Required Plugins:**
+
+  - Eclipse Temurin Installer
+  - SonarQube Scanner
+  - NodeJS Plugin
+  - OWASP Plugin
+  - Prometheus metrics
+  - Docker-related plugins
+  - Kubernetes plugins
+
+2. **Add Credentials for SonarQube and Docker:**
+
+  - Generate a token in SonarQube and add it to Jenkins credentials.
+  - Add Docker Hub credentials.
+
+3. **Configure Jenkins Tools:**
+
+  - Add JDK, NodeJS, Docker, and Sonar Scanner through the Jenkins interface.
+
+4. **Configure Global Settings for SonarQube:**
+
+  - Add SonarQube server details in Jenkins global settings.
+  - Set up webhooks for SonarQube.
+
+5. **Run the Pipeline:**
+
+  - Create a new pipeline job in Jenkins and use the following script:
+
+```groovy
+pipeline {
+    agent any
+    tools {
+        jdk 'jdk17'
+        nodejs 'node16'
+    }
+    stages {
+        stage('Checkout from Git') {
+            steps {
+                git branch: 'legacy', url: 'https://github.com/Aakibgithuber/Chat-gpt-deployment.git'
+            }
+        }
+        // Further stages for build, analysis, and deployment...
+    }
+}
+```
+
+---
+
+
 
 ## Kubernetes Cluster Creation using Terraform
 ### Step 2: Create a New Jenkins Pipeline for EKS
