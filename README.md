@@ -6,8 +6,6 @@ This project demonstrates the deployment of a ChatGPT clone app using a DevSecOp
 
 ![chrome_BfQMgIpJhG](https://github.com/user-attachments/assets/af828e5a-4ce2-4c49-80cb-79541cea61d3)
 
-![image](https://github.com/user-attachments/assets/3042a1ea-4372-434b-bf5e-8445b9bb741c)
-
 ---
 
 ## Table of Contents
@@ -468,6 +466,8 @@ sudo systemctl start grafana-server
 12.** Add Prometheus as a Data Source in Grafana.**
 
 13. **Import Dashboards for monitoring.**
+
+![chrome_JeHmbaKevR](https://github.com/user-attachments/assets/19234e83-b8e8-4f78-93c2-620e7ed0c129)
 
 ---
 
