@@ -463,7 +463,7 @@ sudo systemctl start grafana-server
   - Access Grafana at `http://<public_ip>:3000`.
   - Login with `admin/admin`.
 
-12.** Add Prometheus as a Data Source in Grafana.**
+12. ** Add Prometheus as a Data Source in Grafana.**
 
 13. **Import Dashboards for monitoring.**
 
@@ -493,7 +493,7 @@ kubectl delete deployment chatbot
   terraform destroy --auto-approve
   ```
 
-4, **Remove IAM Roles and Users from the IAM section.**
+4. **Remove IAM Roles and Users from the IAM section.**
 
 ---
 
